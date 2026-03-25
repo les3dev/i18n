@@ -18,6 +18,19 @@
             "default": "./dist/svelte/svelte/index.svelte.js"
         }
     },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/les3dev/i18n.git"
+    },
+    "keywords": [
+        "i18n",
+        "internationalization",
+        "svelte",
+        "typescript",
+        "type-safe"
+    ],
+    "author": "Les3Dev",
+    "license": "MIT",
     "peerDependencies": {
         "svelte": ">=5.0.0"
     },
