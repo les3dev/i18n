@@ -1,0 +1,42 @@
+{
+    "name": "@les3dev/i18n",
+    "version": "0.1.0",
+    "type": "module",
+    "files": [
+        "dist"
+    ],
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+        },
+        "./svelte": {
+            "types": "./dist/svelte/svelte/index.svelte.d.ts",
+            "svelte": "./dist/svelte/svelte/index.svelte.js",
+            "default": "./dist/svelte/svelte/index.svelte.js"
+        }
+    },
+    "peerDependencies": {
+        "svelte": ">=5.0.0"
+    },
+    "peerDependenciesMeta": {
+        "svelte": {
+            "optional": true
+        }
+    },
+    "devDependencies": {
+        "@sveltejs/adapter-auto": "^7.0.1",
+        "@sveltejs/kit": "^2.55.0",
+        "@sveltejs/package": "^2.0.0",
+        "@sveltejs/vite-plugin-svelte": "^6.2.4",
+        "svelte": "^5.0.0",
+        "typescript": "^5.0.0"
+    },
+    "scripts": {
+        "build": "npm run build:ts && npm run build:svelte",
+        "build:ts": "tsc --project tsconfig.json",
+        "build:svelte": "svelte-kit sync && svelte-package -o dist/svelte"
+    }
+}
