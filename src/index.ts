@@ -4,6 +4,14 @@ export type TranslationMap = Record<string, TranslationValue>;
 
 export type TranslationArgs<T extends TranslationValue> = T extends (...args: infer Args) => string ? Args : never[];
 
+type I18nRegistration = {
+    _types: {locale: string; map: TranslationMap};
+};
+
+export type TranslateFn<TReg extends I18nRegistration> = {
+    <K extends keyof TReg["_types"]["map"]>(key: K, ...args: TranslationArgs<TReg["_types"]["map"][K]>): string;
+};
+
 export function register_translations<
     const TTranslations extends Record<string, TranslationMap>,
     TDefaultLocale extends keyof TTranslations & string,
