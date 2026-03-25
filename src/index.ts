@@ -1,2 +1,3 @@
-export type {TranslateFn, DefaultTranslation} from "./i18n";
-export {register_translations} from "./i18n";
+export type {TranslateFn, DefaultTranslation} from "./lib/i18n";
+export {register_translations} from "./lib/i18n";
+export {get_locale_from_headers} from "./lib/get_locale_from_headers";

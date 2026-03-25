@@ -11,17 +11,16 @@
  * } satisfies DefaultTranslation;
  */
 export type DefaultTranslation = Record<string, string | ((...args: never[]) => string)>;
-
 type TranslationFn = (...args: never[]) => string;
 type TranslationValue = string | TranslationFn;
-
 export type TranslationMap = Record<string, TranslationValue>;
 export type TranslationArgs<T extends TranslationValue> = T extends (...args: infer Args) => string ? Args : never[];
-
 type I18nRegistration = {
-    _types: {locale: string; map: TranslationMap};
+    _types: {
+        locale: string;
+        map: TranslationMap;
+    };
 };
-
 /**
  * A type-safe translate function with locale.
  *
@@ -30,7 +29,7 @@ type I18nRegistration = {
  * @example
  * ```ts
  * import type {TranslateFn} from "@les3dev/i18n";
- * import type {i18n} from "$lib/i18n";
+ * import type {i18n} from "./i18n";
  *
  * declare global {
  *     namespace App {
@@ -47,7 +46,7 @@ type I18nRegistration = {
  * ```
  * @example
  * // hooks.server.ts
- * import {i18n} from "$lib/i18n";
+ * import {i18n} from "./i18n";
  * import type {Handle} from "@sveltejs/kit";
  *
  * export const handle: Handle = async ({event, resolve}) => {
@@ -62,16 +61,15 @@ type I18nRegistration = {
 export type TranslateFn<TReg extends I18nRegistration> = {
     <K extends keyof TReg["_types"]["map"]>(key: K, ...args: TranslationArgs<TReg["_types"]["map"][K]>): string;
 };
-
 /**
  * Registers translations for internationalization.
- * 
+ *
  * Returns an i18n object with a type-safe translate function and _types used to create typesafe helpers (like `create_i18n_context`).
- * 
+ *
  * @param translations - An object mapping locale codes to translation maps
- * @param defaultLocale - The default locale to use when a key is missing
+ * @param default_locale - The default locale to use when a key is missing
  * @returns An i18n object with translate function and type information
- * 
+ *
  * @example
  * ```ts
  * import {register_translations} from "@les3dev/i18n";
@@ -83,15 +81,15 @@ export type TranslateFn<TReg extends I18nRegistration> = {
  *
  * export type Locale = Parameters<typeof translate>[0];
  * export type Translation = typeof fr;
- * 
+ *
  * // Use the translate function directly
  * i18n.translate("en", "greeting"); // "Hello"
  * i18n.translate("fr", "greeting"); // "Bonjour"
  * i18n.translate("en", "greet", "World"); // "Hello, World!"
  * ```
- * 
+ *
  * Configure the default translation by returning an object satisfying DefaultTranslation.
- * 
+ *
  * @example
  * ```ts
  * // fr.ts
@@ -101,14 +99,14 @@ export type TranslateFn<TReg extends I18nRegistration> = {
  *     "Bonjour {name}": (name: string) => `Bonjour ${name}`,
  * } satisfies DefaultTranslation;
  * ```
- * 
+ *
  * Other translations can use Translation exported from the code above.
- * 
+ *
  * @example
  * ```ts
  * // en.ts
  * import type {Translation} from "..";
- * 
+ *
  * export default {
  *     "Bienvenue !": "Welcome!",
  *     Commencer: "Start",
@@ -116,32 +114,13 @@ export type TranslateFn<TReg extends I18nRegistration> = {
  * } satisfies Translation;
  * ```
  */
-export function register_translations<
-    const TTranslations extends Record<string, TranslationMap>,
-    TDefaultLocale extends keyof TTranslations & string,
->(translations: TTranslations, defaultLocale: TDefaultLocale) {
-    type TLocale = keyof TTranslations & string;
-    type TDefault = TTranslations[TDefaultLocale];
-
-    function translate<K extends keyof TDefault>(
-        locale: TLocale,
-        key: K,
-        ...args: TranslationArgs<TDefault[K]>
-    ): string {
-        const dict = (translations[locale] ?? translations[defaultLocale]) as TDefault;
-        const value = dict[key as string];
-
-        if (value === undefined) {
-            throw new Error(`Missing key '${String(key)}' for locale '${locale}'.`);
-        }
-        if (typeof value === "string") {
-            return value;
-        }
-        return (value as TranslationFn)(...(args as never[]));
-    }
-
-    return {
-        translate,
-        _types: undefined as unknown as {locale: TLocale; map: TDefault},
+export declare function register_translations<const TTranslations extends Record<string, TranslationMap>, TDefaultLocale extends keyof TTranslations & string>(translations: TTranslations, default_locale: TDefaultLocale): {
+    translate: <K extends keyof TTranslations[TDefaultLocale]>(locale: keyof TTranslations & string, key: K, ...args: TranslationArgs<TTranslations[TDefaultLocale][K]>) => string;
+    locales: (keyof TTranslations & string)[];
+    default_locale: TDefaultLocale;
+    _types: {
+        locale: keyof TTranslations & string;
+        map: TTranslations[TDefaultLocale];
     };
-}
+};
+export {};

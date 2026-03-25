@@ -6,5 +6,5 @@
     "declaration": true,
     "verbatimModuleSyntax": false
   },
-  "include": ["src/index.ts", "src/index.d.ts"]
+  "include": ["src/index.ts", "src/lib/i18n.ts", "src/lib/get_locale_from_headers.ts", "src/index.d.ts"]
 }
