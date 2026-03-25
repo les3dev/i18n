@@ -1,7 +1,7 @@
-import type fr from "./fr";
+import type {Translation} from "..";
 
 export default {
-  "Bienvenue !": "Welcome!",
-  Commencer: "Start",
-  "Bonjour %name": (name: string) => `Hello ${name}`,
-} satisfies typeof fr;
+    "Bienvenue !": "Welcome!",
+    Commencer: "Start",
+    "Bonjour {name}": (name: string) => `Hello ${name}`,
+} satisfies Translation;

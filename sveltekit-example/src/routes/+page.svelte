@@ -12,6 +12,6 @@
 </select>
 
 <h1>{i18n.t("Bienvenue !")}</h1>
-<p>{i18n.t("Bonjour %name", "Alice")}</p>
+<p>{i18n.t("Bonjour {name}", "Alice")}</p>
 <p>Server: {data.server_greeting}</p>
 <button>{i18n.t("Commencer")}</button>
