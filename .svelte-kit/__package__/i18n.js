@@ -8,12 +8,13 @@
  * @returns An i18n object with translate function and type information
  *
  * @example
+ * For monorepo compatibility, use explicit type annotation with the `I18n` interface:
  * ```ts
- * import {register_translations} from "@les3dev/i18n";
+ * import {register_translations, type I18n} from "@les3dev/i18n";
  * import fr from "./translations/fr";
  * import en from "./translations/en";
-
- * export const i18n = register_translations({fr, en}, "fr");
+ *
+ * export const i18n: I18n<"fr" | "en", typeof fr> = register_translations({fr, en}, "fr");
  * export const {translate} = i18n;
  *
  * export type Locale = Parameters<typeof translate>[0];

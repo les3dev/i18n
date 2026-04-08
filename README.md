@@ -57,16 +57,18 @@ export default {
 ### 2. Register Translations
 
 ```typescript
-import {register_translations} from "@les3dev/i18n";
+import {register_translations, type I18n} from "@les3dev/i18n";
 import fr from "./translations/fr";
 import en from "./translations/en";
 
-export const i18n = register_translations({fr, en}, "fr");
+export const i18n: I18n<"fr" | "en", typeof fr> = register_translations({fr, en}, "fr");
 export const {translate} = i18n;
 
 export type Locale = Parameters<typeof translate>[0];
 export type Translation = typeof fr;
 ```
+
+> **Note:** The explicit `I18n` type annotation is required for monorepo compatibility. Without it, bundlers like Rollup may fail to generate portable type declarations.
 
 ### 3. Automatic Locale Detection
 
@@ -156,11 +158,11 @@ src/
 
 ```typescript
 // src/lib/i18n/index.ts
-import {register_translations} from "@les3dev/i18n";
+import {register_translations, type I18n} from "@les3dev/i18n";
 import fr from "./translations/fr";
 import en from "./translations/en";
 
-export const i18n = register_translations({fr, en}, "fr");
+export const i18n: I18n<"fr" | "en", typeof fr> = register_translations({fr, en}, "fr");
 export const {translate, locales, default_locale} = i18n;
 
 export type Locale = Parameters<typeof translate>[0];

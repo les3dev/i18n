@@ -22,6 +22,16 @@ type I18nRegistration = {
     _types: {locale: string; map: TranslationMap};
 };
 
+export interface I18n<
+    TLocale extends string,
+    TMap extends TranslationMap,
+> {
+    translate: <K extends keyof TMap>(locale: TLocale, key: K, ...args: TranslationArgs<TMap[K]>) => string;
+    locales: TLocale[];
+    default_locale: TLocale;
+    _types: {locale: TLocale; map: TMap};
+}
+
 /**
  * A type-safe translate function with locale.
  *
@@ -65,33 +75,34 @@ export type TranslateFn<TReg extends I18nRegistration> = {
 
 /**
  * Registers translations for internationalization.
- * 
+ *
  * Returns an i18n object with a type-safe translate function and _types used to create typesafe helpers (like `create_i18n_context`).
- * 
+ *
  * @param translations - An object mapping locale codes to translation maps
  * @param default_locale - The default locale to use when a key is missing
  * @returns An i18n object with translate function and type information
- * 
+ *
  * @example
+ * For monorepo compatibility, use explicit type annotation with the `I18n` interface:
  * ```ts
- * import {register_translations} from "@les3dev/i18n";
+ * import {register_translations, type I18n} from "@les3dev/i18n";
  * import fr from "./translations/fr";
  * import en from "./translations/en";
-
- * export const i18n = register_translations({fr, en}, "fr");
+ *
+ * export const i18n: I18n<"fr" | "en", typeof fr> = register_translations({fr, en}, "fr");
  * export const {translate} = i18n;
  *
  * export type Locale = Parameters<typeof translate>[0];
  * export type Translation = typeof fr;
- * 
+ *
  * // Use the translate function directly
  * i18n.translate("en", "greeting"); // "Hello"
  * i18n.translate("fr", "greeting"); // "Bonjour"
  * i18n.translate("en", "greet", "World"); // "Hello, World!"
  * ```
- * 
+ *
  * Configure the default translation by returning an object satisfying DefaultTranslation.
- * 
+ *
  * @example
  * ```ts
  * // fr.ts
@@ -101,14 +112,14 @@ export type TranslateFn<TReg extends I18nRegistration> = {
  *     "Bonjour {name}": (name: string) => `Bonjour ${name}`,
  * } satisfies DefaultTranslation;
  * ```
- * 
+ *
  * Other translations can use Translation exported from the code above.
- * 
+ *
  * @example
  * ```ts
  * // en.ts
  * import type {Translation} from "..";
- * 
+ *
  * export default {
  *     "Bienvenue !": "Welcome!",
  *     Commencer: "Start",

@@ -21,6 +21,15 @@ type I18nRegistration = {
         map: TranslationMap;
     };
 };
+export interface I18n<TLocale extends string, TMap extends TranslationMap> {
+    translate: <K extends keyof TMap>(locale: TLocale, key: K, ...args: TranslationArgs<TMap[K]>) => string;
+    locales: TLocale[];
+    default_locale: TLocale;
+    _types: {
+        locale: TLocale;
+        map: TMap;
+    };
+}
 /**
  * A type-safe translate function with locale.
  *
@@ -71,12 +80,13 @@ export type TranslateFn<TReg extends I18nRegistration> = {
  * @returns An i18n object with translate function and type information
  *
  * @example
+ * For monorepo compatibility, use explicit type annotation with the `I18n` interface:
  * ```ts
- * import {register_translations} from "@les3dev/i18n";
+ * import {register_translations, type I18n} from "@les3dev/i18n";
  * import fr from "./translations/fr";
  * import en from "./translations/en";
-
- * export const i18n = register_translations({fr, en}, "fr");
+ *
+ * export const i18n: I18n<"fr" | "en", typeof fr> = register_translations({fr, en}, "fr");
  * export const {translate} = i18n;
  *
  * export type Locale = Parameters<typeof translate>[0];
