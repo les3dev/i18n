@@ -1,2 +1,4 @@
 packages:
   - sveltekit-example
+allowBuilds:
+  esbuild: true

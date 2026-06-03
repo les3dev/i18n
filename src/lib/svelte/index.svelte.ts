@@ -2,15 +2,7 @@ import {getContext, setContext} from "svelte";
 
 type TranslationArgs<T> = T extends (...args: infer Args) => string ? Args : never[];
 
-type UnionToIntersection<U> = (U extends unknown ? (x: U) => void : never) extends (x: infer I) => void ? I : never;
-
-type I18nT<TMap extends Record<string, unknown>> = UnionToIntersection<
-    keyof TMap extends infer K
-        ? K extends keyof TMap
-            ? (key: K, ...args: TranslationArgs<TMap[K]>) => string
-            : never
-        : never
->;
+type I18nT<TMap extends Record<string, unknown>> = <K extends keyof TMap>(key: K, ...args: TranslationArgs<TMap[K]>) => string;
 
 type InferLocale<R extends {_types: {locale: string}}> = R["_types"]["locale"];
 type InferMap<R extends {_types: {map: Record<string, unknown>}}> = R["_types"]["map"];
