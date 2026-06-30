@@ -45,11 +45,12 @@
         "@sveltejs/package": "^2.0.0",
         "@sveltejs/vite-plugin-svelte": "^6.2.4",
         "svelte": "^5.0.0",
-        "typescript": "^5.0.0"
+        "tsdown": "^0.22.3",
+        "typescript": "^6.0.3"
     },
     "scripts": {
         "build": "svelte-kit sync && npm run build:ts && npm run build:svelte",
-        "build:ts": "tsc --project tsconfig.json",
+        "build:ts": "tsdown",
         "build:svelte": "svelte-package -o dist/svelte"
     }
 }

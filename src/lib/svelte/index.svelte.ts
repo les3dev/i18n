@@ -1,11 +1,11 @@
-import {getContext, setContext} from "svelte";
+import {getContext, setContext} from 'svelte';
 
 type TranslationArgs<T> = T extends (...args: infer Args) => string ? Args : never[];
 
 type I18nT<TMap extends Record<string, unknown>> = <K extends keyof TMap>(key: K, ...args: TranslationArgs<TMap[K]>) => string;
 
-type InferLocale<R extends {_types: {locale: string}}> = R["_types"]["locale"];
-type InferMap<R extends {_types: {map: Record<string, unknown>}}> = R["_types"]["map"];
+type InferLocale<R extends {_types: {locale: string}}> = R['_types']['locale'];
+type InferMap<R extends {_types: {map: Record<string, unknown>}}> = R['_types']['map'];
 
 type I18nContext<TLocale extends string, TMap extends Record<string, unknown>> = {
     locale: TLocale;

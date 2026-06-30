@@ -22,10 +22,7 @@ type I18nRegistration = {
     _types: {locale: string; map: TranslationMap};
 };
 
-export interface I18n<
-    TLocale extends string,
-    TMap extends TranslationMap,
-> {
+export interface I18n<TLocale extends string, TMap extends TranslationMap> {
     translate: <K extends keyof TMap>(locale: TLocale, key: K, ...args: TranslationArgs<TMap[K]>) => string;
     locales: TLocale[];
     default_locale: TLocale;
@@ -70,7 +67,7 @@ export interface I18n<
  * };
  */
 export type TranslateFn<TReg extends I18nRegistration> = {
-    <K extends keyof TReg["_types"]["map"]>(key: K, ...args: TranslationArgs<TReg["_types"]["map"][K]>): string;
+    <K extends keyof TReg['_types']['map']>(key: K, ...args: TranslationArgs<TReg['_types']['map'][K]>): string;
 };
 
 /**
@@ -127,25 +124,21 @@ export type TranslateFn<TReg extends I18nRegistration> = {
  * } satisfies Translation;
  * ```
  */
-export function register_translations<
-    const TTranslations extends Record<string, TranslationMap>,
-    TDefaultLocale extends keyof TTranslations & string,
->(translations: TTranslations, default_locale: TDefaultLocale) {
+export function register_translations<const TTranslations extends Record<string, TranslationMap>, TDefaultLocale extends keyof TTranslations & string>(
+    translations: TTranslations,
+    default_locale: TDefaultLocale,
+) {
     type TLocale = keyof TTranslations & string;
     type TDefault = TTranslations[TDefaultLocale];
 
-    function translate<K extends keyof TDefault>(
-        locale: TLocale,
-        key: K,
-        ...args: TranslationArgs<TDefault[K]>
-    ): string {
+    function translate<K extends keyof TDefault>(locale: TLocale, key: K, ...args: TranslationArgs<TDefault[K]>): string {
         const dict = (translations[locale] ?? translations[default_locale]) as TDefault;
         const value = dict[key as string];
 
         if (value === undefined) {
             throw new Error(`Missing key '${String(key)}' for locale '${locale}'.`);
         }
-        if (typeof value === "string") {
+        if (typeof value === 'string') {
             return value;
         }
         return (value as TranslationFn)(...(args as never[]));
